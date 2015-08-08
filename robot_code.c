@@ -21,16 +21,16 @@ task main()	{
 	resetMotorEncoder(shooter);	//resets shooter encoder
 	resetMotorEncoder(feeder);	//resets current position of feeder to zero
 
-	setMotorBrakeMode(shooter, motorCoast);	//shooter won't spin down as fast when flywheel is off (e.g., when collecting balls)
-	setMotorBrakeMode(left, motorCoast);		//allows robot to be pushed up ramp
+	setMotorBrakeMode(shooter, motorCoast);		//sets shooter motor to coast so shooter won't spin down as fast when flywheel is off (e.g., when collecting balls)
+	setMotorBrakeMode(left, motorCoast);		//sets drive motors to coast to allows robot to be pushed up ramp
 	setMotorBrakeMode(right, motorCoast);
 
-	setMotorReversed(intake, true);				//reverses intake motor because of position
-	setMotorReversed(right, true);				//reverses right drive motor
+	setMotorReversed(intake, true);					//reverses intake motor because of position
+	setMotorReversed(right, true);					//reverses right drive motor because of position
 
-	float shooterTarget = 145;						//target shooter angular velocity
-	int loopCounter = 0;									//counts number of time the main while loop cycles for tracking shooter angular velocity
-	bool loading = false;									//prevents user from loading ball into chamber when robot is in the process of firing
+	const float shooterTarget = 145;					//target shooter angular velocity
+	int loopCounter = 0;							//counts number of time the main while loop cycles for tracking shooter angular velocity
+	bool loading = false;							//prevents user from loading ball into chamber when robot is in the process of firing
 
 	bool flywheelOn = true;								//boolean for if the flywheel is on (starts flywheel at the start of the match so time isn't wasted on spinup
 	bool readyToFire = false;							//lets driver know if flywheel is at optimal rpm
@@ -38,10 +38,10 @@ task main()	{
 
 	while (true) {
 
-		motor[left] = vexRT(ChA) + vexRT(ChC);		//drive code (kaj drive)
+		motor[left] = vexRT(ChA) + vexRT(ChC);		//simple drive code
 		motor[right] = vexRT(ChA) - vexRT(ChC);
 
-		if (readyToFire) {												//LEDs will glow blue if at optimal rpm
+		if (readyToFire) {							//LEDs will glow blue if at optimal rpm
 			setTouchLEDColor(light1, colorBlue);
 			setTouchLEDColor(light2, colorBlue);
 		}
@@ -63,7 +63,7 @@ task main()	{
 		}
 
 
-		if (vexRT(BtnLUp) == 1) {					//calls the shoot function
+		if (vexRT(BtnLUp) == 1) {				//calls the shoot function to fire ball
 			shoot();
 		}
 
@@ -84,7 +84,7 @@ task main()	{
 
 		loopCounter++;					//increases loop count by 1 for each time the while loop runs
 
-		if (loopCounter == 2000) {			//bang bang control
+		if (loopCounter == 2000) {			//bang bang control loop for shooter motor
 			if (flywheelOn) {
 				if (getMotorEncoder(shooter) < shooterTarget) {	//spins up if not at optimal rpm
 					setMotorSpeed(shooter, 100);
