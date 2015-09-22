@@ -90,7 +90,7 @@ task main()	{
 					setMotorSpeed(shooter, 100);
 				}
 
-				else {				//kills shooter if target speeds is reached
+				else {				//turns shooter motor off if target speeds is reached or exceeded
 					motor[shooter] = 0;
 				}
 			}
